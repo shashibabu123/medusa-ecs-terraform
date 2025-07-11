@@ -1,18 +1,25 @@
 FROM node:18
 
+# Install OS-level dependencies
+RUN apt-get update && apt-get install -y \
+  python3 \
+  make \
+  g++ \
+  libpq-dev \
+  && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
 WORKDIR /app
 
-# Install Medusa CLI globally
-RUN npm install -g medusa-cli
-
-# Copy your project files
+# Copy everything into container
 COPY . .
 
 # Install dependencies
 RUN npm install
 
+# Expose Medusa default port
 EXPOSE 9000
 
-# Start Medusa in production mode
+# Run the app
 CMD ["medusa", "start"]
 
